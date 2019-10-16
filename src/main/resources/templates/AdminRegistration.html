@@ -12,10 +12,22 @@
 
 <script>
 	$(function() {
-		/* $("#username").focus(function() {
-			$(this).val("请输入帐号");
-		}); */
-
+		/* 不能为空 */
+		$(".registerForm").submit(function(){
+			if(0==$("#username").val.length){
+				$("#userCheck").html("请输入账号");
+				return false;
+			}
+			if(0==$("#password").val.length){
+				$("#passCheck").html("请输入密码");
+				return false;
+			}
+			if(0==$("#repassword").val.length){
+				$("#passCheck").html("请输入重复密码");
+				return false;
+			}
+		});
+		/* 账号不能重复 */
 		$("#username").blur(function() {
 			var username=$("#username").val();
 			$.ajax({
@@ -32,30 +44,46 @@
 				  }
 			});
 		});
-
-	});
-	$(function() {
+		/* 密码一致 */
 		$("#repassword").blur(function() {
 			$("#checkPassword").empty();
-			if($("#repeatpassword").val() !=$("#peatpassword").val()){
-                $("#checkPassword").html("重复密码不一致");
-            }else{
-            	 $("#checkPassword").html("重复密码一致");
-            }
-		});
+		if($("#repassword").val() !=$("#password").val()){
+            $("#checkPassword").html("重复密码不一致");
+        }else{
+        	 $("#checkPassword").html("重复密码一致");
+        }
 	});
+
+});
 </script>
 
 </head>
 <body>
 
 	<div>
-		<form action="addUser" method="post">
-			账号：<input type="text" name="username" id="username" /><span id = "userCheck" class="bg-danger"></span><br/> 
-			登录密码：<input type="password" name="password" id="password"/><br /> 
-			密码确认：<input type="password" name="repassword" id="repassword"/><span id = "checkPassword" class="bg-danger"></span><br /> 
-			<input type="hidden" name="rid" value="1"/><br /> 
-			<input type="submit" value="注册" />
+		<form action="addUser" method="post" class="registerForm">
+			<table>
+				<tr>
+					<td>账号：</td>
+					<td><input type="text" name="username" id="username" placeholder="设置你的账号"/></td>
+					<td><span id = "userCheck" class="bg-danger"></span></td>
+				</tr>
+				<tr>
+					<td class="">登陆密码</td>
+					<td class=""><input id="password" name="password" type="password"  placeholder="密码大于6位数" /> </td>
+					<td><span id = "passCheck" class="bg-danger"></span></td>
+				</tr>
+				<tr>
+					<td>密码确认：</td>
+					<td><input type="password" name="repassword" id="repassword" placeholder="输入一致的密码"/></td>
+					<td><span id = "checkPassword" class="bg-danger"></span> </td>
+				</tr>
+				<tr>
+					<td><input type="hidden" name="rid" value="1"/></td>
+					<td><input type="submit" class="btn btn-primary" value="注册" /></td>
+					<td></td>
+				</tr>
+			</table>
 		</form>
 	</div>
 
