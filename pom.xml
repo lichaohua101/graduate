@@ -24,11 +24,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!-- 集成mybatis -->
+		<!-- 集成mybatis-plus(辅助工具，代码生成) -->
 		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>1.1.1</version>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus</artifactId>
+			<version>2.1.4</version>
 		</dependency>
 		<!-- mysql -->
 		<dependency>
@@ -100,6 +100,12 @@
 			<groupId>cn.hutool</groupId>
 			<artifactId>hutool-all</artifactId>
 			<version>4.3.1</version>
+		</dependency>
+		<!-- nokehtml 相关依赖 (html不用全部添加  / 了)-->
+		<dependency>
+		   <groupId>net.sourceforge.nekohtml</groupId>
+		   <artifactId>nekohtml</artifactId>
+		   <version>1.9.21</version>
 		</dependency>
 		
 	</dependencies>

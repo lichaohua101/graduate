@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8"/>
-<title>用户注册</title>
+<title>管理注册</title>
  <!-- 引入css、jq、 bootstrap、chart -->
     <link href="css/bootstrap/3.3.6/bootstrap.min.css" th:src="@{css/bootstrap/3.3.6/bootstrap.min.css}" rel="stylesheet" />
     <script src="js/jquery/2.0.0/jquery.min.js" th:src="@{js/jquery/2.0.0/jquery.min.js}"></script>
@@ -12,46 +12,50 @@
 
 <script>
 	$(function() {
-		/* 不能为空 */
-		$(".registerForm").submit(function(){
-			if(0==$("#username").val.length){
-				$("#userCheck").html("请输入账号");
-				return false;
-			}
-			if(0==$("#password").val.length){
-				$("#passCheck").html("请输入密码");
-				return false;
-			}
-			if(0==$("#repassword").val.length){
-				$("#passCheck").html("请输入重复密码");
-				return false;
-			}
-		});
+
+		var flag = false;
+		 $(".registerForm").submit(function(){
+			  return flag;
+		   });
 		/* 账号不能重复 */
 		$("#username").blur(function() {
 			var username=$("#username").val();
-			$.ajax({
-				  type: "post",
-				  url: "/checkUsername",
-				  data:"username="+username,
-				  dataType: "json", //回调函数接收数据的数据格式
-				  success:function(data){
-					  if(data == 1){
-						  $("#userCheck").html("帐号已被注册"); 
-	                    }else{
-						  $("#userCheck").html("帐号可用"); 
-	                    }
-				  }
-			});
+			if(0==username.length){
+				$("#userCheck").html("账号不能为空"); 
+				flag=false;
+			}else{
+				$.ajax({
+					  type: "post",
+					  url: "/checkUsername",
+					  data:"username="+username,
+					  dataType: "json", //回调函数接收数据的数据格式
+					  success:function(data){
+						  if(data == 1){
+							  $("#userCheck").html("帐号已被注册"); 
+							  flag=false;
+		                    }else{
+							  $("#userCheck").html("帐号可用"); 
+							  flag=true;
+		                    }
+					  }
+				});
+			}
 		});
 		/* 密码一致 */
-		$("#repassword").blur(function() {
-			$("#checkPassword").empty();
-		if($("#repassword").val() !=$("#password").val()){
-            $("#checkPassword").html("重复密码不一致");
-        }else{
-        	 $("#checkPassword").html("重复密码一致");
-        }
+		$("#repassword,#password").blur(function() {
+			var password=$("#password").val();
+			$("#passCheck,#repassCheck").empty();
+			if(0==password.length){
+				$("#passCheck").html("密码不能为空");
+				flag=false;
+			}else{
+				if($("#repassword").val() !=$("#password").val()){
+		            $("#repassCheck").html("重复密码不一致");
+		            flag=false;
+		        }else{
+		        	 $("#repassCheck").html("重复密码一致");
+		        }
+			}
 	});
 
 });
@@ -65,18 +69,18 @@
 			<table>
 				<tr>
 					<td>账号：</td>
-					<td><input type="text" name="username" id="username" placeholder="设置你的账号"/></td>
+					<td><input type="text" name="username" id="username" placeholder="设置你的账号" required="required"/></td>
 					<td><span id = "userCheck" class="bg-danger"></span></td>
 				</tr>
 				<tr>
 					<td class="">登陆密码</td>
-					<td class=""><input id="password" name="password" type="password"  placeholder="密码大于6位数" /> </td>
+					<td class=""><input id="password" name="password" type="password"  placeholder="密码大于6位数" required="required" /> </td>
 					<td><span id = "passCheck" class="bg-danger"></span></td>
 				</tr>
 				<tr>
 					<td>密码确认：</td>
-					<td><input type="password" name="repassword" id="repassword" placeholder="输入一致的密码"/></td>
-					<td><span id = "checkPassword" class="bg-danger"></span> </td>
+					<td><input type="password" name="repassword" id="repassword" placeholder="输入一致的密码" required="required"/></td>
+					<td><span id = "repassCheck" class="bg-danger"></span> </td>
 				</tr>
 				<tr>
 					<td><input type="hidden" name="rid" value="1"/></td>

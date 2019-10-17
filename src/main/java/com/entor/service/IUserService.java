@@ -1,6 +1,9 @@
 package com.entor.service;
 
 import com.entor.entity.User;
+
+import java.util.List;
+
 import com.baomidou.mybatisplus.service.IService;
 
 /**
@@ -11,7 +14,7 @@ import com.baomidou.mybatisplus.service.IService;
  * @author wangfm
  * @since 2019-10-14
  */
-public interface IUserService extends IService<User> {
+public interface IUserService{
 	/**
 	 * 根据用户名查找对象
 	 * @param username
@@ -23,4 +26,12 @@ public interface IUserService extends IService<User> {
 	 * @param user
 	 */
 	public void add(User user);
+	/**
+	 * 查询所有用户
+	 */
+	public List<User>queryAll();
+	/**
+	 * 删除用户
+	 */
+	public void deleteUserById(int id);
 }

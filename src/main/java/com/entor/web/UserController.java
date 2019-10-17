@@ -14,15 +14,16 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.entor.entity.User;
-import com.entor.mapper.UserMapper;
 import com.entor.service.IUserService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
-import cn.hutool.json.JSONObject;
 
 /**
  * <p>
@@ -41,27 +42,30 @@ public class UserController {
 	private IUserService userService;
 	private static List<User> list;
 	
-	//注销
+	//注销(admin,user)
 	@RequestMapping("/logout")
 	public String logout() {
 		Subject subject = SecurityUtils.getSubject();
 		subject.logout();
 		return "redirect:/login";
 	}
-	//用户首页
+	//用户首页(admin,user)
 	@RequestMapping("/index")
 	public String index(Map<String, Object>map) {
 		Subject subject = SecurityUtils.getSubject();
 		User user = (User)subject.getPrincipal();
-		map.put("username", user.getUsername());
-		return "index";
+		if (user.getRid()==1) {
+			return "redirect:/userQueryByPage";
+		}else {
+			return "userExit";
+		}
 	}
-	//登录
+	//登录(admin,user)
 	@RequestMapping("/login")
 	public String login() {
 		return "login";
 	}
-	//登录检查
+	//登录检查(admin,user)
 	@RequestMapping("/loginCheck")
 	public String loginCheck(String username,String password,Map<String, Object>map) {
 		System.out.println("明文密码"+password);
@@ -79,23 +83,31 @@ public class UserController {
 			return "forward:/login";
 		}
 	}
-	//跳转的注册页面
+	//跳转的注册页面(user)
 	@RequestMapping("/userRegistration")
 	public String userRegistration() {
 		return "/UserRegistration";
 	}
+	//跳转的注册页面(admin)
 	@RequestMapping("/AdminRegistration")
 	public String AdminRegistration() {
 		return "/AdminRegistration";
 	}
-	//添加用户
+	//添加用户(admin,user)
 	@RequestMapping("/addUser")
 	public String addUser(User user) {
-		System.out.println("注册用户："+user);
+		Subject subject = SecurityUtils.getSubject();
+		User user2 = (User)subject.getPrincipal();
 		userService.add(user);
-		return "/login";
+		System.out.println("注册成功："+user);
+		System.out.println("登录用户："+user2);
+		if (user2==null) {
+			return "/login";
+		}else {
+			return "redirect:/userQueryByPage";
+		}
 	}
-	//校验用户名是否存在
+	//校验用户名是否存在(admin,user)
 	@RequestMapping("/checkUsername")
 	@ResponseBody
 	public int checkUsername(HttpServletRequest request,HttpServletResponse response, Map<String, Object>map) throws IOException {
@@ -107,6 +119,36 @@ public class UserController {
 				msg= 0;
 			}
 			return msg;
+	}
+	//用户分页（admin）
+	@RequestMapping("/userQueryByPage")
+	public String userQueryByPage(Model model) {
+		Subject subject = SecurityUtils.getSubject();
+		User user = (User)subject.getPrincipal();
+		
+		List<User> list = userService.queryAll();
+		for (User u : list) { 
+			System.out.println(u);
+		}
+		model.addAttribute("username", user.getUsername());
+		model.addAttribute("list", list);
+		return "/adminUser";
+	}
+	/*public PageInfo<User> userQueryByPage(@PathVariable int pageNum,@PathVariable int pageSize){
+		PageHelper.startPage(pageNum,pageSize);
+		//查询数据出来，立即用PageInfo<User> 进行分配，不然会有未知错误
+		List<User> list = userService.queryAll();
+		PageInfo<User> lInfo = new PageInfo<>(list);
+		return lInfo;
+	}*/
+	
+	//删除用户（user）adminAddUser
+	@RequestMapping("deleteUserById")
+	public String deleteUserById(HttpServletRequest request) {
+		int id = Integer.parseInt(request.getParameter("id"));
+		userService.deleteUserById(id);
+		System.out.println("删除的Id"+id);
+		return "/adminUser";
 	}
 }
  

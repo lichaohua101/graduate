@@ -42,5 +42,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 		userMapper.insert(user);
 	}
 
+	@Override
+	public List<User> queryAll() {
+		return userMapper.queryAll();
+	}
+
+	@Override
+	public void deleteUserById(int id) {
+		userMapper.deleteById(id);
+	}
+
 	
 }
