@@ -98,11 +98,13 @@ public class UserController {
 	public String addUser(User user) {
 		Subject subject = SecurityUtils.getSubject();
 		User user2 = (User)subject.getPrincipal();
+		SimpleHash hash = new SimpleHash("md5", user.getPassword(), "123",2);
+		String enpassword = hash.toHex();
+		user.setPassword(enpassword);
 		userService.add(user);
 		System.out.println("注册成功："+user);
-		System.out.println("登录用户："+user2);
 		if (user2==null) {
-			return "/login";
+			return "login";
 		}else {
 			return "redirect:/userQueryByPage";
 		}
@@ -143,12 +145,12 @@ public class UserController {
 	}*/
 	
 	//删除用户（user）adminAddUser
-	@RequestMapping("deleteUserById")
+	@RequestMapping("/deleteUserById")
 	public String deleteUserById(HttpServletRequest request) {
 		int id = Integer.parseInt(request.getParameter("id"));
 		userService.deleteUserById(id);
 		System.out.println("删除的Id"+id);
-		return "/adminUser";
+		return "redirect:/userQueryByPage";
 	}
 }
  
