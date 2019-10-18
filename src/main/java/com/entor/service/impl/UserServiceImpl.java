@@ -52,5 +52,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 		userMapper.deleteById(id);
 	}
 
+	@Override
+	public User queryById(int id) {
+		return userMapper.selectById(id);
+	}
+
+	@Override
+	public void update(User user) {
+		Wrapper<User> wrapper = new EntityWrapper<>();
+		wrapper.eq(User.ID, user.getId());
+		userMapper.update(user, wrapper);
+	}
+
 	
 }

@@ -144,12 +144,29 @@ public class UserController {
 		return lInfo;
 	}*/
 	
-	//删除用户（user）adminAddUser
+	//删除用户（user）adminAddUser  updateUserById
 	@RequestMapping("/deleteUserById")
 	public String deleteUserById(HttpServletRequest request) {
 		int id = Integer.parseInt(request.getParameter("id"));
 		userService.deleteUserById(id);
 		System.out.println("删除的Id"+id);
+		return "redirect:/userQueryByPage";
+	}
+	//跳转修改用户界面
+	@RequestMapping("/queryUserById")
+	public String queryUserById(HttpServletRequest request,Map<String, Object>map) {
+		int id = Integer.parseInt(request.getParameter("id"));
+		User user = userService.queryById(id);
+		System.out.println("查找用户"+user);
+		map.put("user", user);
+		return "updateUser";
+	}
+	//修改用户
+	@RequestMapping("/updateUserById")
+	public String updateUserById(User user) {
+		System.out.println("修改为"+user);
+		userService.update(user);
+		System.out.println("修改为"+user);
 		return "redirect:/userQueryByPage";
 	}
 }

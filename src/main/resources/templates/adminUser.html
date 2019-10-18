@@ -21,7 +21,7 @@
 		$("#username").blur(function() {
 			var username=$("#username").val();
 			if(0==username.length){
-				$("#userCheck").html("账号不能为空"); 
+				$("#userCheck").html("学号不能为空"); 
 				flag=false;
 			}else{
 				$.ajax({
@@ -31,10 +31,10 @@
 					  dataType: "json", //回调函数接收数据的数据格式
 					  success:function(data){
 						  if(data == 1){
-							  $("#userCheck").html("帐号已被注册"); 
+							  $("#userCheck").html("学号被注册"); 
 							  flag=false;
 		                    }else{
-							  $("#userCheck").html("帐号可用"); 
+							  $("#userCheck").html("学号可用"); 
 							  flag=true;
 		                    }
 					  }
@@ -90,7 +90,7 @@
 			<thead>
 				<tr>
 					<td>id</td>
-					<td>帐号</td>
+					<td>学号</td>
 					<td>密码</td>
 					<td>编辑</td>
 				</tr>
@@ -98,9 +98,9 @@
 			<tbody>
 				<tr th:each="u: ${list}">
 					<td th:text="${u.id}"></td>
-					<td th:text="${u.username}">帐号</td>
+					<td th:text="${u.username}">学号</td>
 					<td th:text="${u.password}">密码</td>
-					<td><a th:href='@{/deleteUserById(id=${(u.id)})}'>删除</a>|修改</td>
+					<td><a th:href='@{/deleteUserById(id=${(u.id)})}'>删除</a>|<a th:href='@{/queryUserById(id=${(u.id)})}'>修改</a></td>
 				</tr>
 			</tbody>
 		</table>
@@ -113,7 +113,7 @@
 					<td colspan="3" id="add">添加用户</td>
 				</tr>
 				<tr>
-					<td>账号：</td>
+					<td>学号：</td>
 					<td><input type="text" name="username" id="username"
 						placeholder="设置你的账号" required="required" /></td>
 					<td><span id="userCheck" class="bg-danger"></span></td>

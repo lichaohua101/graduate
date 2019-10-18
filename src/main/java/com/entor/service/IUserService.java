@@ -32,6 +32,18 @@ public interface IUserService{
 	public List<User>queryAll();
 	/**
 	 * 删除用户
+	 * @param id
 	 */
 	public void deleteUserById(int id);
+	/**
+	 * 查询用户
+	 * @param id
+	 * @return
+	 */
+	public User queryById(int id);
+	/**
+	 * 修改用户
+	 * @param user
+	 */
+	public void update(User user);
 }
