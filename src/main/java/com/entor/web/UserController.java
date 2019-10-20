@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,30 +36,21 @@ import com.github.pagehelper.PageInfo;
  */
 /*@RestController
 @RequestMapping("/user")*/
+
 @Controller
 public class UserController {
 
 	@Autowired
 	private IUserService userService;
 	private static List<User> list;
+	private Subject subject ;
 	
 	//注销(admin,user)
 	@RequestMapping("/logout")
 	public String logout() {
-		Subject subject = SecurityUtils.getSubject();
+		subject = SecurityUtils.getSubject();
 		subject.logout();
 		return "redirect:/login";
-	}
-	//用户首页(admin,user)
-	@RequestMapping("/index")
-	public String index(Map<String, Object>map) {
-		Subject subject = SecurityUtils.getSubject();
-		User user = (User)subject.getPrincipal();
-		if (user.getRid()==1) {
-			return "redirect:/userQueryByPage";
-		}else {
-			return "userExit";
-		}
 	}
 	//登录(admin,user)
 	@RequestMapping("/login")
@@ -74,10 +66,10 @@ public class UserController {
 		String enpassword = hash.toHex();
 		System.out.println("经过md5方式加密并经过2次盐“123”的密文密码"+enpassword);
 		UsernamePasswordToken token = new UsernamePasswordToken(username, enpassword);
-		Subject subject = SecurityUtils.getSubject();
+		subject = SecurityUtils.getSubject();
 		try {
 			subject.login(token);
-			return "redirect:/index";
+			return "redirect:/userQueryByPage";
 		}catch(Exception e) {
 			map.put("msg", "账号或者密码错误");
 			return "forward:/login";
@@ -96,7 +88,7 @@ public class UserController {
 	//添加用户(admin,user)
 	@RequestMapping("/addUser")
 	public String addUser(User user) {
-		Subject subject = SecurityUtils.getSubject();
+		subject = SecurityUtils.getSubject();
 		User user2 = (User)subject.getPrincipal();
 		SimpleHash hash = new SimpleHash("md5", user.getPassword(), "123",2);
 		String enpassword = hash.toHex();
@@ -125,7 +117,7 @@ public class UserController {
 	//用户分页（admin）
 	@RequestMapping("/userQueryByPage")
 	public String userQueryByPage(Model model) {
-		Subject subject = SecurityUtils.getSubject();
+		subject = SecurityUtils.getSubject();
 		User user = (User)subject.getPrincipal();
 		
 		List<User> list = userService.queryAll();
@@ -145,6 +137,7 @@ public class UserController {
 	}*/
 	
 	//删除用户（user）adminAddUser  updateUserById
+//	@RequiresPermissions("sys_delete")
 	@RequestMapping("/deleteUserById")
 	public String deleteUserById(HttpServletRequest request) {
 		int id = Integer.parseInt(request.getParameter("id"));
@@ -153,6 +146,7 @@ public class UserController {
 		return "redirect:/userQueryByPage";
 	}
 	//跳转修改用户界面
+//	@RequiresPermissions("queryById")
 	@RequestMapping("/queryUserById")
 	public String queryUserById(HttpServletRequest request,Map<String, Object>map) {
 		int id = Integer.parseInt(request.getParameter("id"));
@@ -162,9 +156,11 @@ public class UserController {
 		return "updateUser";
 	}
 	//修改用户
+//	@RequiresPermissions("sys_update")
 	@RequestMapping("/updateUserById")
 	public String updateUserById(User user) {
-		System.out.println("修改为"+user);
+		SimpleHash hash = new SimpleHash("md5", user.getPassword(), "123",2);
+		user.setPassword(hash.toHex());
 		userService.update(user);
 		System.out.println("修改为"+user);
 		return "redirect:/userQueryByPage";

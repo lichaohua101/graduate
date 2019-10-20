@@ -16,10 +16,10 @@
 
 <div>
 	<form action="updateUserById" method="post">
-		<input type="text" name="username" value="'+${user.username}+'" />${user.username}
-		<input type="password" name="password" th:text="${user.password}"/>
-		<input type="hidden" name="rid" th:text="${user.rid}" />
-		<input type="hidden" name="id" th:text="${user.id}" />
+		<input type="text" name="username" th:value="${user.username}" />
+		<input type="password" name="password" th:value="${user.password}"/>
+		<input type="hidden" name="rid" th:value="${user.rid}" />
+		<input type="hidden" name="id" th:value="${user.id}" />
 		<input type="submit" value="修改"/>
 	</form>
 </div>
