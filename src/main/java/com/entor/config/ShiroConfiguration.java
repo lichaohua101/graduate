@@ -51,7 +51,7 @@ public class ShiroConfiguration {
 		//校验用户是否重复
 		filterChainDefinitionMap.put("/checkUsername", "anon");
 		// <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
-		filterChainDefinitionMap.put("/**", "anon");
+		filterChainDefinitionMap.put("/**", "authc");
 		// 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
 		shiroFilterFactoryBean.setLoginUrl("/login");
 		// 未授权界面;

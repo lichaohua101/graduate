@@ -60,6 +60,7 @@ public class UserRealm extends AuthorizingRealm {
 		// 添加角色名称
 		info.addRole(role.getName());
 		info.addStringPermissions(list);
+		System.out.println("++++++++++++++++"+role);
 		return info;
 		
 //		return null;
