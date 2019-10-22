@@ -1,6 +1,8 @@
 package com.entor.service;
 
 import com.entor.entity.Collegeclass;
+import com.entor.entity.User;
+import com.entor.entity.UserDetails;
 
 import java.util.List;
 
@@ -20,5 +22,7 @@ public interface ICollegeclassService extends IService<Collegeclass> {
 	public List<Collegeclass> queryCollege();
 	//查询学院有什么班级
 	public List<Collegeclass> queryClass(String college);
+	//班级的全部学生
+	public List<UserDetails> queryAllClassStudents(int id);
 	
 }

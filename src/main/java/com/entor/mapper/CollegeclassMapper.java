@@ -1,6 +1,7 @@
 package com.entor.mapper;
 
 import com.entor.entity.Collegeclass;
+import com.entor.entity.UserDetails;
 
 import java.util.List;
 
@@ -31,6 +32,14 @@ public interface CollegeclassMapper extends BaseMapper<Collegeclass> {
 	 * @param college
 	 * @return
 	 */
-	@Select("SELECT * FROM collegeclass where  college = ${college}")
+	@Select("SELECT * FROM collegeclass where  college = #{college} ")
 	public List<Collegeclass> queryClass(String college);
+	
+	/**
+	 * 班级的全部在线学生
+	 * @param ClassName
+	 * @return
+	 */
+	@Select("SELECT ud.* FROM collegeclass cc,user_details ud WHERE cc.id=ud.classRoomID AND ud.`online`=1 AND  ud.classRoomID=#{id}")
+	public List<UserDetails> queryAllClassStudents(int id);
 }

@@ -39,7 +39,6 @@ import com.github.pagehelper.PageInfo;
 @RequestMapping("/user")*/
 
 @Controller
-//@RequiresRoles("admin")
 public class UserController {
 
 	@Autowired

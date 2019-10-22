@@ -22,7 +22,11 @@
 			});
 		});
 	</script>
-
+	<style type="text/css">
+		.input-group{
+			text-align: center;
+		}
+	</style>
 </head>
 <body >
 	
@@ -42,11 +46,31 @@
 	 <div class="input-group">
      	<table>
      		<tr th:each="c: ${list}">
+     			<td><a th:text="${c.college}" th:href='@{/queryClass(className=${(c.college)})}'></a></td>
+     		</tr>
+     	</table>
+    </div>
+    
+     <div class="input-group">
+     	<table>
+     		<tr th:each="c: ${list1}">
 				<td th:text="${c.id}"></td>
      			<td th:text="${c.college}"></td>
-     			<td th:text="${c.className}"></td>
+     			<td><a th:text="${c.className}" th:href='@{queryClassStudent(id=${(c.id)})}'></a></td>
      			<td th:text="${c.teacher}"></td>
      			
+     		</tr>
+     	</table>
+    </div>
+    
+    <div class="input-group">
+     	<table>
+     		<tr th:each="u: ${luser}">
+     			<td th:text="${u.id}"></td>
+     			<td th:text="${u.username}"></td>
+     			<!-- <td th:text="${u.password}"></td> -->
+     			<td th:if="${u.lUsers.online}=='0'">不在线</td>
+     			<td th:if="${u.lUsers.online}=='1'">在线</td>
      		</tr>
      	</table>
     </div>

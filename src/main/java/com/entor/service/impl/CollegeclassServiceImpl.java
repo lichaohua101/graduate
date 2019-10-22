@@ -1,6 +1,8 @@
 package com.entor.service.impl;
 
 import com.entor.entity.Collegeclass;
+import com.entor.entity.User;
+import com.entor.entity.UserDetails;
 import com.entor.mapper.CollegeclassMapper;
 import com.entor.service.ICollegeclassService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -32,6 +34,11 @@ public class CollegeclassServiceImpl extends ServiceImpl<CollegeclassMapper, Col
 	@Override
 	public List<Collegeclass> queryClass(String college) {
 		return collegeclassMapper.queryClass(college);
+	}
+
+	@Override
+	public List<UserDetails> queryAllClassStudents(int id) {
+		return collegeclassMapper.queryAllClassStudents(id);
 	}
 	
 }
