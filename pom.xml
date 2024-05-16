@@ -93,7 +93,7 @@
 		<dependency>
 			<groupId>cn.hutool</groupId>
 			<artifactId>hutool-all</artifactId>
-			<version>4.3.1</version>
+			<version>5.8.21</version>
 		</dependency>
 		<!-- nokehtml 相关依赖 (html不用全部添加  / 了)-->
 		<dependency>
